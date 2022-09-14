@@ -18,7 +18,7 @@ import com.example.moviecatalog.repositories.MovieRepository;
 public class MovieController {
   private final MovieRepository repository;
 
-  MovieController(MovieRepository repository) {
+  public MovieController(MovieRepository repository) {
     this.repository = repository;
   }
 
@@ -43,14 +43,12 @@ public class MovieController {
     return repository.findById(id).map(movie -> {
       movie.setName(newMovie.getName());
       return repository.save(movie);
-    }).orElseGet(() -> {
-      newMovie.setId(id);
-      return repository.save(newMovie);
-    });
+    }).orElseThrow(() -> new MovieNotFoundException(id));
   }
 
   @DeleteMapping("/movies/{id}")
-  void deleteOne(@PathVariable Long id) {
+  String deleteOne(@PathVariable Long id) {
     repository.deleteById(id);
+    return "Movie is deleted successsfully";
   }
 }

@@ -21,6 +21,10 @@ public class Director {
         return this.id;
     }
 
+    public Long setId(Long id) {
+        return this.id = id;
+    }
+
     @Column
     private String name;
 

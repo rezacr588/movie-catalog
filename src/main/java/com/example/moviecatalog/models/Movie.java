@@ -46,6 +46,7 @@ public class Movie {
     public void setRating(Rating rating) {
         this.rating = rating;
     }
+    
     public Set<Director> getDirectors() {
         return directors;
     }

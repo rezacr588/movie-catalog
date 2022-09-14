@@ -2,6 +2,6 @@ package com.example.moviecatalog.expceptions;
 
 public class MovieNotFoundException extends RuntimeException {
   public MovieNotFoundException(Long id) {
-    super("Could not find the movie" + id);
+    super("Could not find the movie" + id.toString());
   }
 }

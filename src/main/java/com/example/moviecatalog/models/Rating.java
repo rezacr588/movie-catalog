@@ -19,10 +19,14 @@ public class Rating {
         return this.id;
     }
 
+    public Long setId(Long id) {
+        return this.id = id;
+    }
+    
     @Column
     private Integer number;
 
-    public Integer getName() {
+    public Integer getNumber() {
         return this.number;
     }
 
