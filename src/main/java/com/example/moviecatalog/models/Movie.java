@@ -3,6 +3,7 @@ package com.example.moviecatalog.models;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +24,7 @@ public class Movie {
         return this.id;
     }
 
+    @Column
     private String name;
 
     public String getName() {
