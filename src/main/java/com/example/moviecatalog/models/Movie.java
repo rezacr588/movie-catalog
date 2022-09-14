@@ -18,8 +18,21 @@ public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    
+    public Long getId() {
+        return this.id;
+    }
+
     private String name;
 
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
     @ManyToMany
     Set<Director> directors;
 

@@ -13,7 +13,20 @@ public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private Integer number;
+
+    public Long getId() {
+        return this.id;
+    }
+
+    private String name;
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @OneToOne(mappedBy = "rating")
     private Movie user;
