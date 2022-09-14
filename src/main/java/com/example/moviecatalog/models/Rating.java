@@ -1,5 +1,6 @@
 package com.example.moviecatalog.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,16 +19,17 @@ public class Rating {
         return this.id;
     }
 
-    private String name;
+    @Column
+    private Integer number;
 
-    public String getName() {
-        return this.name;
+    public Integer getName() {
+        return this.number;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 
     @OneToOne(mappedBy = "rating")
-    private Movie user;
+    private Movie rating;
 }
