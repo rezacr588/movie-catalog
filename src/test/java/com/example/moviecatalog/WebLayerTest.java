@@ -25,6 +25,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,6 +38,7 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MvcResult;
 
+import com.example.moviecatalog.controllers.CreateMovieEntry;
 import com.example.moviecatalog.models.Movie;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -89,6 +93,30 @@ public class WebLayerTest extends AbstractTest {
         .andExpect(status().isOk())
         .andDo(document("createMovie"));
   }
+
+  @Test
+  public void shouldCreateEntryMovie() throws Exception {
+    CreateMovieEntry createMovieEntry = new CreateMovieEntry();
+    createMovieEntry.setName("Justice League");
+    createMovieEntry.setNumber(8);
+
+    Set<String> hash_Set = new HashSet<String>();
+
+    hash_Set.add("Nolan");
+    hash_Set.add("Snyder");
+
+    createMovieEntry.setDirectors(hash_Set);
+
+    String inputJson = this.mapToJson(createMovieEntry);
+
+    this.mockMvc.perform(post("/createMovie")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .characterEncoding("utf-8")
+        .content(inputJson))
+        .andExpect(status().isCreated())
+        .andDo(document("createEntryMovie"));
+  }
   
   @Test
   public void shouldDeleteMovie() throws Exception {
@@ -117,10 +145,8 @@ public class WebLayerTest extends AbstractTest {
         .contentType(MediaType.APPLICATION_JSON)
         .characterEncoding("utf-8")
         .content(inputJson)).andReturn();
+    
     String prevContent = mvcCreateResult.getResponse().getContentAsString();
-
-    System.out.println(prevContent);
-
 
     Movie updatedMovie = new Movie();
     updatedMovie.setName("Ali");
@@ -133,7 +159,6 @@ public class WebLayerTest extends AbstractTest {
     int status = mvcUpdateResult.getResponse().getStatus();
     assertEquals(200, status);
     String content = mvcUpdateResult.getResponse().getContentAsString();
-    System.out.println(content);
     assertNotEquals(prevContent, content);
   }
 }
