@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.moviecatalog;
+package com.example.moviecatalog.WebLayer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -24,9 +24,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,109 +35,85 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MvcResult;
 
-import com.example.moviecatalog.controllers.CreateMovieEntry;
-import com.example.moviecatalog.models.Movie;
+import com.example.moviecatalog.AbstractTest;
+import com.example.moviecatalog.models.Rating;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 
 @SpringBootTest
 @ExtendWith({ RestDocumentationExtension.class, SpringExtension.class })
-public class WebLayerTest extends AbstractTest {
+public class RatingWebLayerTest extends AbstractTest {
 
   @BeforeEach
   public void setUp(RestDocumentationContextProvider restDocumentation) {
     super.setUp(restDocumentation);
   }
 
-  protected String createMovie(String name) throws JsonProcessingException {
-    Movie createMovie = new Movie();
-    createMovie.setName(name);
-    String inputJson = this.mapToJson(createMovie);
+  protected String createRating(Integer number) throws JsonProcessingException {
+    Rating createRating = new Rating();
+    createRating.setNumber(number);
+    String inputJson = this.mapToJson(createRating);
     return inputJson;
   }
 
   @Test
   public void shouldReturnAllMovies() throws Exception {
-    this.mockMvc.perform(get("/movies"))
+    this.mockMvc.perform(get("/ratings"))
         .andExpect(status().isOk())
-        .andDo(document("getAllMovies"));
+        .andDo(document("getAllRatings"));
   }
 
   @Test
   public void shouldReturnOneMovie() throws Exception {
-    MvcResult mvcCreateResult = this.mockMvc.perform(post("/movies")
+    MvcResult mvcCreateResult = this.mockMvc.perform(post("/ratings")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .characterEncoding("utf-8")
-        .content(createMovie("Reza"))).andReturn();
+        .content(createRating(2))).andReturn();
 
     String content = mvcCreateResult.getResponse().getContentAsString();
 
-    Long movieId = super.mapFromJson(content, Movie.class).getId();
+    Long movieId = super.mapFromJson(content, Rating.class).getId();
 
-    this.mockMvc.perform(get("/movies/" + movieId))
+    this.mockMvc.perform(get("/ratings/" + movieId))
         .andExpect(status().isOk())
-        .andDo(document("getOneMovies"));
+        .andDo(document("getOneRatings"));
   }
 
   @Test
-  public void shouldCreateMovie() throws Exception {
-    this.mockMvc.perform(post("/movies")
+  public void shouldcreateRating() throws Exception {
+    this.mockMvc.perform(post("/ratings")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .characterEncoding("utf-8")
-        .content(this.createMovie("Reza")))
+        .content(this.createRating(3)))
         .andExpect(status().isOk())
-        .andDo(document("createMovie"));
+        .andDo(document("createRating"));
   }
 
-  @Test
-  public void shouldCreateEntryMovie() throws Exception {
-    CreateMovieEntry createMovieEntry = new CreateMovieEntry();
-    createMovieEntry.setName("Justice League");
-    createMovieEntry.setNumber(8);
-
-    Set<String> hash_Set = new HashSet<String>();
-
-    hash_Set.add("Nolan");
-    hash_Set.add("Snyder");
-
-    createMovieEntry.setDirectors(hash_Set);
-
-    String inputJson = this.mapToJson(createMovieEntry);
-
-    this.mockMvc.perform(post("/createMovie")
-        .accept(MediaType.APPLICATION_JSON)
-        .contentType(MediaType.APPLICATION_JSON)
-        .characterEncoding("utf-8")
-        .content(inputJson))
-        .andExpect(status().isCreated())
-        .andDo(document("createEntryMovie"));
-  }
-  
   @Test
   public void shouldDeleteMovie() throws Exception {
-    this.mockMvc.perform(post("/movies")
+    this.mockMvc.perform(post("/ratings")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .characterEncoding("utf-8")
-        .content(this.createMovie("Reza"))).andReturn();
-    String uri = "/movies/1";
+        .content(this.createRating(4))).andReturn();
+    String uri = "/ratings/1";
     MvcResult mvcResult = this.mockMvc.perform(delete(uri)).andExpect(status().isOk())
-        .andDo(document("deleteOneMovie")).andReturn();
+        .andDo(document("deleteOneRating")).andReturn();
     int status = mvcResult.getResponse().getStatus();
     assertEquals(200, status);
     String content = mvcResult.getResponse().getContentAsString();
-    assertEquals(content, "Movie is deleted successsfully");
+    assertEquals(content, "Rating is deleted successsfully");
   }
 
   @Test
   public void shouldUpdateMovie() throws Exception {
-    Movie createdMovie = new Movie();
-    createdMovie.setName("Reza");
+    Rating createdMovie = new Rating();
+    createdMovie.setNumber(2);
     String inputJson = super.mapToJson(createdMovie);
 
-    MvcResult mvcCreateResult = this.mockMvc.perform(post("/movies")
+    MvcResult mvcCreateResult = this.mockMvc.perform(post("/ratings")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .characterEncoding("utf-8")
@@ -148,13 +121,13 @@ public class WebLayerTest extends AbstractTest {
     
     String prevContent = mvcCreateResult.getResponse().getContentAsString();
 
-    Movie updatedMovie = new Movie();
-    updatedMovie.setName("Ali");
+    Rating updatedMovie = new Rating();
+    updatedMovie.setNumber(3);
     String updatedInputJson = super.mapToJson(updatedMovie);
 
-    MvcResult mvcUpdateResult = this.mockMvc.perform(put("/movies/"+ this.mapFromJson(prevContent, Movie.class).getId())
+    MvcResult mvcUpdateResult = this.mockMvc.perform(put("/ratings/"+ this.mapFromJson(prevContent, Rating.class).getId())
         .contentType(MediaType.APPLICATION_JSON_VALUE).content(updatedInputJson)).andExpect(status().isOk())
-        .andDo(document("updateOneMovies")).andReturn();
+        .andDo(document("updateOneRatings")).andReturn();
     
     int status = mvcUpdateResult.getResponse().getStatus();
     assertEquals(200, status);

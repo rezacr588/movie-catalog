@@ -49,7 +49,14 @@ public class RatingController {
   }
 
   @DeleteMapping("/ratings/{id}")
-  void deleteOne(@PathVariable Long id) {
+  String deleteOne(@PathVariable Long id) {
     repository.deleteById(id);
+    return "Rating is deleted successsfully";
+  }
+
+  @DeleteMapping("/ratings")
+  String deleteAll() {
+    repository.deleteAll();
+    return "All ratings are deleted successsfully";
   }
 }
