@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "directors")
@@ -26,6 +27,7 @@ public class Director {
     }
 
     @Column
+    @NotBlank(message = "Name is mandatory")
     private String name;
 
     public String getName() {

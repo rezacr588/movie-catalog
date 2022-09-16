@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "movies")
@@ -25,6 +27,7 @@ public class Movie {
     }
 
     @Column
+    @NotBlank(message = "Name is mandatory")
     private String name;
 
     public String getName() {
@@ -56,9 +59,11 @@ public class Movie {
     }
 
     @ManyToMany
+    @NotNull(message = "Director is mandatory")
     Set<Director> directors;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "rating_id", referencedColumnName = "id")
+    @NotNull(message = "Rating is mandatory")
     private Rating rating;
 }
