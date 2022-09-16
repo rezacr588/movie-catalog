@@ -11,10 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.moviecatalog.expceptions.DirectorNotFoundException;
-import com.example.moviecatalog.expceptions.MovieNotFoundException;
 import com.example.moviecatalog.models.Director;
 import com.example.moviecatalog.repositories.DirectorRepository;
-import com.example.moviecatalog.repositories.MovieRepository;
 
 @RestController
 public class DirectorController {
@@ -52,7 +50,16 @@ public class DirectorController {
   }
 
   @DeleteMapping("/directors/{id}")
-  void deleteOne(@PathVariable Long id) {
+  String deleteOne(@PathVariable Long id) {
     repository.deleteById(id);
+    return "Director is deleted successsfully";
   }
+
+  // create a route to delete all directors
+  @DeleteMapping("/directors") 
+  String deleteAll() {
+    repository.deleteAll();
+    return "All directors are deleted successsfully";
+  }
+
 }
