@@ -40,4 +40,12 @@ public class Director {
 
     @ManyToMany
     Set<Movie> movies;
+
+    public Set<Movie> getMovies() {
+        return this.movies;
+    }
+
+    public void setMovies(Set<Movie> movies) {
+        this.movies = movies;
+    }
 }

@@ -40,4 +40,12 @@ public class Rating {
     @OneToOne(mappedBy = "rating")
     @NotNull(message = "Movie is mandatory")
     private Movie rating;
+
+    public Movie getRating() {
+        return this.rating;
+    }
+
+    public void setRating(Movie rating) {
+        this.rating = rating;
+    }
 }
