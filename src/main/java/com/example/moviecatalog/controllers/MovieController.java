@@ -1,8 +1,11 @@
 package com.example.moviecatalog.controllers;
 
 import java.net.URI;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.apache.tomcat.jni.Directory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.moviecatalog.expceptions.MovieNotFoundException;
+import com.example.moviecatalog.models.Director;
 import com.example.moviecatalog.models.Movie;
 import com.example.moviecatalog.models.Rating;
 import com.example.moviecatalog.repositories.MovieRepository;
@@ -60,24 +64,5 @@ public class MovieController {
   String deleteAll() {
     repository.deleteAll();
     return "All movies are deleted successsfully";
-  }
-
-  // create a custome route for create movie entry 
-  @PostMapping(
-    value = "/createMovie",
-    consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-    produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-  public ResponseEntity<Movie> postBody(@RequestBody CreateMovieEntry createMovieEntry) {
-    Movie newMovie = new Movie();
-    Rating newRating = new Rating();
-    newMovie.setName(createMovieEntry.getName());
-    newRating.setNumber(createMovieEntry.getNumber());
-    
-    Movie persistedMovie = repository.save(newMovie);
-    return ResponseEntity
-        .created(URI
-                  .create(String.format("/movies/%s", persistedMovie.getId())))
-        .body(persistedMovie);
-    }
-  
+  }  
 }

@@ -25,9 +25,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +36,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.example.moviecatalog.AbstractTest;
-import com.example.moviecatalog.controllers.CreateMovieEntry;
 import com.example.moviecatalog.models.Movie;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -93,30 +89,6 @@ public class MovieWebLayerTest extends AbstractTest {
         .content(this.createMovie("Reza")))
         .andExpect(status().isOk())
         .andDo(document("createMovie"));
-  }
-
-  @Test
-  public void shouldCreateEntryMovie() throws Exception {
-    CreateMovieEntry createMovieEntry = new CreateMovieEntry();
-    createMovieEntry.setName("Justice League");
-    createMovieEntry.setNumber(8);
-
-    Set<String> hash_Set = new HashSet<String>();
-
-    hash_Set.add("Nolan");
-    hash_Set.add("Snyder");
-
-    createMovieEntry.setDirectors(hash_Set);
-
-    String inputJson = this.mapToJson(createMovieEntry);
-
-    this.mockMvc.perform(post("/createMovie")
-        .accept(MediaType.APPLICATION_JSON)
-        .contentType(MediaType.APPLICATION_JSON)
-        .characterEncoding("utf-8")
-        .content(inputJson))
-        .andExpect(status().isCreated())
-        .andDo(document("createEntryMovie"));
   }
   
   @Test
