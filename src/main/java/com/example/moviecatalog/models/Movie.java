@@ -22,13 +22,20 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     
-    public Long getId() {
-        return this.id;
-    }
-
     @Column
     @NotBlank(message = "Name is mandatory")
     private String name;
+
+    @ManyToMany
+    @NotNull(message = "Directors is mandatory")
+    Set<Director> directors;
+
+    @OneToOne  
+    private Rating rating;
+
+    public Long getId() {
+        return this.id;
+    }
 
     public String getName() {
         return this.name;
@@ -57,13 +64,4 @@ public class Movie {
     public Rating getRating() {
         return this.rating;
     }
-
-    @ManyToMany
-    @NotNull(message = "Director is mandatory")
-    Set<Director> directors;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "rating_id", referencedColumnName = "id")
-    @NotNull(message = "Rating is mandatory")
-    private Rating rating;
 }

@@ -26,7 +26,7 @@ public class Rating {
     }
     
     @Column
-    @NotBlank(message = "Number is mandatory")
+    @NotNull(message = "Number is mandatory")
     private Integer number;
 
     public Integer getNumber() {
@@ -35,17 +35,5 @@ public class Rating {
 
     public void setNumber(Integer number) {
         this.number = number;
-    }
-
-    @OneToOne(mappedBy = "rating")
-    @NotNull(message = "Movie is mandatory")
-    private Movie rating;
-
-    public Movie getRating() {
-        return this.rating;
-    }
-
-    public void setRating(Movie rating) {
-        this.rating = rating;
     }
 }
