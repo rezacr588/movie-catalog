@@ -25,36 +25,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.example.moviecatalog.AbstractTest;
 import com.example.moviecatalog.models.Director;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 
 @SpringBootTest
 @ExtendWith({ RestDocumentationExtension.class, SpringExtension.class })
 public class DirectorsWebLayerTest extends AbstractTest {
-
-  @BeforeEach
-  public void setUp(RestDocumentationContextProvider restDocumentation) {
-    super.setUp(restDocumentation);
-  }
-
-  protected String createDirector(String name) throws JsonProcessingException {
-    Director createDirector = new Director();
-    createDirector.setName(name);
-    String inputJson = this.mapToJson(createDirector);
-    return inputJson;
-  }
 
   @Test
   public void shouldReturnAllDirectors() throws Exception {

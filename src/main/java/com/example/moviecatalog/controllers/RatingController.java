@@ -18,7 +18,7 @@ import com.example.moviecatalog.repositories.RatingRepository;
 public class RatingController {
   private final RatingRepository repository;
 
-  RatingController(RatingRepository repository) {
+  public RatingController(RatingRepository repository) {
     this.repository = repository;
   }
 
@@ -28,6 +28,7 @@ public class RatingController {
   }
 
   @PostMapping("/ratings")
+  public
   Rating newRating(@RequestBody Rating newRating) {
     return repository.save(newRating);
   }

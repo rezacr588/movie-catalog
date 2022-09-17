@@ -2,13 +2,13 @@ package com.example.moviecatalog.models;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -27,6 +27,9 @@ public class Movie {
     private String name;
 
     @ManyToMany
+    @JoinTable(name = "movie_director", 
+            joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "director_id", referencedColumnName = "id"))
     @NotNull(message = "Directors is mandatory")
     Set<Director> directors;
 

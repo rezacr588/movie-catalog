@@ -1,13 +1,10 @@
 package com.example.moviecatalog.models;
 
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -18,6 +15,10 @@ public class Director {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column
+    @NotBlank(message = "Name is mandatory")
+    private String name;
+    
     public Long getId() {
         return this.id;
     }
@@ -26,26 +27,11 @@ public class Director {
         return this.id = id;
     }
 
-    @Column
-    @NotBlank(message = "Name is mandatory")
-    private String name;
-
     public String getName() {
         return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @ManyToMany
-    Set<Movie> movies;
-
-    public Set<Movie> getMovies() {
-        return this.movies;
-    }
-
-    public void setMovies(Set<Movie> movies) {
-        this.movies = movies;
     }
 }

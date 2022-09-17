@@ -49,22 +49,15 @@ public class RatingWebLayerTest extends AbstractTest {
     super.setUp(restDocumentation);
   }
 
-  protected String createRating(Integer number) throws JsonProcessingException {
-    Rating createRating = new Rating();
-    createRating.setNumber(number);
-    String inputJson = this.mapToJson(createRating);
-    return inputJson;
-  }
-
   @Test
-  public void shouldReturnAllMovies() throws Exception {
+  public void shouldReturnAllRatings() throws Exception {
     this.mockMvc.perform(get("/ratings"))
         .andExpect(status().isOk())
         .andDo(document("getAllRatings"));
   }
 
   @Test
-  public void shouldReturnOneMovie() throws Exception {
+  public void shouldReturnOneRating() throws Exception {
     MvcResult mvcCreateResult = this.mockMvc.perform(post("/ratings")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
@@ -92,7 +85,7 @@ public class RatingWebLayerTest extends AbstractTest {
   }
 
   @Test
-  public void shouldDeleteMovie() throws Exception {
+  public void shouldDeleteRating() throws Exception {
     this.mockMvc.perform(post("/ratings")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
@@ -108,7 +101,7 @@ public class RatingWebLayerTest extends AbstractTest {
   }
 
   @Test
-  public void shouldUpdateMovie() throws Exception {
+  public void shouldUpdateRating() throws Exception {
     MvcResult mvcCreateResult = this.mockMvc.perform(post("/ratings")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)

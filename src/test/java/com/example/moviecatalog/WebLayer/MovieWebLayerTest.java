@@ -25,36 +25,24 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.example.moviecatalog.AbstractTest;
 import com.example.moviecatalog.models.Movie;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 
 @SpringBootTest
 @ExtendWith({ RestDocumentationExtension.class, SpringExtension.class })
+@WebMvcTest
 public class MovieWebLayerTest extends AbstractTest {
-
-  @BeforeEach
-  public void setUp(RestDocumentationContextProvider restDocumentation) {
-    super.setUp(restDocumentation);
-  }
-
-  protected String createMovie(String name) throws JsonProcessingException {
-    Movie createMovie = new Movie();
-    createMovie.setName(name);
-    String inputJson = this.mapToJson(createMovie);
-    return inputJson;
-  }
 
   @Test
   public void shouldReturnAllMovies() throws Exception {
@@ -85,9 +73,8 @@ public class MovieWebLayerTest extends AbstractTest {
     this.mockMvc.perform(post("/movies")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
-        .characterEncoding("utf-8")
-        .content(this.createMovie("Reza")))
-        .andExpect(status().isOk())
+        .content(createMovie("Reza")))
+        .andExpect(status().isCreated())
         .andDo(document("createMovie"));
   }
   

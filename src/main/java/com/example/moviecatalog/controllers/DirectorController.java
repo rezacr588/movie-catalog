@@ -18,7 +18,7 @@ import com.example.moviecatalog.repositories.DirectorRepository;
 public class DirectorController {
   private final DirectorRepository repository;
 
-  DirectorController(DirectorRepository repository) {
+  public DirectorController(DirectorRepository repository) {
     this.repository = repository;
   }
 
