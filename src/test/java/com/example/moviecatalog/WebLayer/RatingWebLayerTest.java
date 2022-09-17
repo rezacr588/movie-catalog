@@ -37,8 +37,6 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.example.moviecatalog.AbstractTest;
 import com.example.moviecatalog.models.Rating;
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 
 @SpringBootTest
 @ExtendWith({ RestDocumentationExtension.class, SpringExtension.class })
@@ -70,7 +68,7 @@ public class RatingWebLayerTest extends AbstractTest {
 
     this.mockMvc.perform(get("/ratings/" + movieId))
         .andExpect(status().isOk())
-        .andDo(document("getOneRatings"));
+        .andDo(document("getOneRating"));
   }
 
   @Test

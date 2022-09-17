@@ -2,8 +2,10 @@ package com.example.moviecatalog.models;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,10 +29,11 @@ public class Movie {
     private String name;
 
     @ManyToMany
-    @JoinTable(name = "movie_director", 
+    @JoinTable(name = "movie_director",
             joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "director_id", referencedColumnName = "id"))
-    @NotNull(message = "Directors is mandatory")
+            inverseJoinColumns = @JoinColumn(name = "director_id", referencedColumnName = "id")
+        )
+    @NotNull(message = "Directors are mandatory")
     Set<Director> directors;
 
     @OneToOne  
