@@ -26,16 +26,16 @@ public class SearchController {
     }
 
     @GetMapping("/search")
-    public Iterable<Movie> getTickets(
+    public Iterable<Movie> searchMovies(
       @RequestParam(required = false, name="director") String director,
       @RequestParam(required = false, name="rating") String rating
     ) {
 
-      if (director != null && !StringUtils.isEmpty(director)) {
+      if (director != null && StringUtils.hasLength(director)) {
         return movieRepository.findAllMoviesByDirector(Long.parseLong(director));
       }
       
-      if (rating != null && !StringUtils.isEmpty(rating)) {
+      if (rating != null && StringUtils.hasLength(rating)) {
         return movieRepository.findAllMoviesByRating(Integer.parseInt(rating));
       }
 
