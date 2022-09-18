@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.moviecatalog.WebLayer;
+package com.example.moviecatalog.Integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -25,97 +25,96 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.example.moviecatalog.AbstractTest;
-import com.example.moviecatalog.models.Rating;
+import com.example.moviecatalog.models.Director;
+
 
 @SpringBootTest
 @ExtendWith({ RestDocumentationExtension.class, SpringExtension.class })
-public class RatingWebLayerTest extends AbstractTest {
-
-  @BeforeEach
-  public void setUp(RestDocumentationContextProvider restDocumentation) {
-    super.setUp(restDocumentation);
-  }
+public class DirectorsWebLayerTest extends AbstractTest {
 
   @Test
-  public void shouldReturnAllRatings() throws Exception {
-    this.mockMvc.perform(get("/ratings"))
+  public void shouldReturnAllDirectors() throws Exception {
+    this.mockMvc.perform(get("/directors"))
         .andExpect(status().isOk())
-        .andDo(document("getAllRatings"));
+        .andDo(document("getAllDirectors"));
   }
 
   @Test
-  public void shouldReturnOneRating() throws Exception {
-    MvcResult mvcCreateResult = this.mockMvc.perform(post("/ratings")
+  public void shouldReturnOneDirector() throws Exception {
+    MvcResult mvcCreateResult = this.mockMvc.perform(post("/directors")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .characterEncoding("utf-8")
-        .content(createRating(2))).andReturn();
+        .content(createDirector("Nolan"))).andReturn();
 
     String content = mvcCreateResult.getResponse().getContentAsString();
 
-    Long movieId = super.mapFromJson(content, Rating.class).getId();
+    Long movieId = super.mapFromJson(content, Director.class).getId();
 
-    this.mockMvc.perform(get("/ratings/" + movieId))
+    this.mockMvc.perform(get("/directors/" + movieId))
         .andExpect(status().isOk())
-        .andDo(document("getOneRating"));
+        .andDo(document("getOneDirector"));
   }
 
   @Test
   public void shouldcreateRating() throws Exception {
-    this.mockMvc.perform(post("/ratings")
+    this.mockMvc.perform(post("/directors")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .characterEncoding("utf-8")
-        .content(this.createRating(3)))
+        .content(this.createDirector("Nolan")))
         .andExpect(status().isOk())
-        .andDo(document("createRating"));
+        .andDo(document("createDirector"));
   }
 
   @Test
-  public void shouldDeleteRating() throws Exception {
-    this.mockMvc.perform(post("/ratings")
+  public void shouldDeleteMovie() throws Exception {
+    MvcResult mvcCreateResult = this.mockMvc.perform(post("/directors")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .characterEncoding("utf-8")
-        .content(this.createRating(4))).andReturn();
-    String uri = "/ratings/1";
-    MvcResult mvcResult = this.mockMvc.perform(delete(uri)).andExpect(status().isOk())
-        .andDo(document("deleteOneRating")).andReturn();
+        .content(createDirector("Nolan"))).andReturn();
+
+    String createdDirectorContent = mvcCreateResult.getResponse().getContentAsString();
+
+    Long movieId = super.mapFromJson(createdDirectorContent, Director.class).getId();
+
+    MvcResult mvcResult = this.mockMvc.perform(delete("/directors/" + movieId)).andExpect(status().isOk())
+        .andDo(document("deleteOneDirector")).andReturn();
     int status = mvcResult.getResponse().getStatus();
     assertEquals(200, status);
     String content = mvcResult.getResponse().getContentAsString();
-    assertEquals(content, "Rating is deleted successsfully");
+    assertEquals(content, "Director is deleted successsfully");
   }
 
   @Test
-  public void shouldUpdateRating() throws Exception {
-    MvcResult mvcCreateResult = this.mockMvc.perform(post("/ratings")
+  public void shouldUpdateMovie() throws Exception {
+    MvcResult mvcCreateResult = this.mockMvc.perform(post("/directors")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .characterEncoding("utf-8")
-        .content(this.createRating(2))).andReturn();
+        .content(this.createDirector("Reza"))).andReturn();
     
     String prevContent = mvcCreateResult.getResponse().getContentAsString();
 
-    Rating targeDirector = this.mapFromJson(prevContent, Rating.class);
-    targeDirector.setNumber(3);
+    Director targeDirector = this.mapFromJson(prevContent, Director.class);
+    targeDirector.setName("Ali");
     String updatedInputJson = super.mapToJson(targeDirector);
-    String uri = "/ratings/" + this.mapFromJson(prevContent, Rating.class).getId();
+    String uri = "/directors/" + this.mapFromJson(prevContent, Director.class).getId();
 
-    MvcResult mvcUpdateResult = this.mockMvc.perform(put(uri).contentType(MediaType.APPLICATION_JSON_VALUE).content(updatedInputJson))
-        .andExpect(status().isOk())
-        .andDo(document("updateOneRating")).andReturn();
+    MvcResult mvcUpdateResult = this.mockMvc.perform(
+        put(uri)
+        .contentType(MediaType.APPLICATION_JSON_VALUE).content(updatedInputJson)).andExpect(status().isOk())
+        .andDo(document("updateOneDirector")).andReturn();
     
     int status = mvcUpdateResult.getResponse().getStatus();
     assertEquals(200, status);

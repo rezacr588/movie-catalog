@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.moviecatalog.WebLayer;
+package com.example.moviecatalog.Integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -110,24 +110,15 @@ public class MovieWebLayerTest extends AbstractTest {
 
   @Test
   public void shouldUpdateMovie() throws Exception {
-    Movie createdMovie = new Movie();
-    createdMovie.setName("Reza");
-    String inputJson = super.mapToJson(createdMovie);
-
     MvcResult mvcCreateResult = this.mockMvc.perform(post(URI)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
-        .characterEncoding("utf-8")
-        .content(inputJson)).andReturn();
+        .content(this.createMovie("Previous Name"))).andReturn();
     
     String prevContent = mvcCreateResult.getResponse().getContentAsString();
-
-    Movie updatedMovie = new Movie();
-    updatedMovie.setName("Ali");
-    String updatedInputJson = super.mapToJson(updatedMovie);
-
+    
     MvcResult mvcUpdateResult = this.mockMvc.perform(put(this.getUriID(prevContent))
-        .contentType(MediaType.APPLICATION_JSON_VALUE).content(updatedInputJson)).andExpect(status().isOk())
+        .contentType(MediaType.APPLICATION_JSON_VALUE).content(this.createMovie("Previous Name"))).andExpect(status().isOk())
         .andDo(document("updateOneMovies")).andReturn();
     
     int status = mvcUpdateResult.getResponse().getStatus();
