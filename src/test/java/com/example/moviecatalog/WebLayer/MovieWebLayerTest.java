@@ -25,7 +25,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -44,16 +43,18 @@ import com.example.moviecatalog.models.Movie;
 @WebMvcTest
 public class MovieWebLayerTest extends AbstractTest {
 
+  private static final String URI = "/api/movies";
+  
   @Test
   public void shouldReturnAllMovies() throws Exception {
-    this.mockMvc.perform(get("/movies"))
+    this.mockMvc.perform(get(URI))
         .andExpect(status().isOk())
         .andDo(document("getAllMovies"));
   }
 
   @Test
   public void shouldReturnOneMovie() throws Exception {
-    MvcResult mvcCreateResult = this.mockMvc.perform(post("/movies")
+    MvcResult mvcCreateResult = this.mockMvc.perform(post(URI)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .characterEncoding("utf-8")
@@ -63,14 +64,14 @@ public class MovieWebLayerTest extends AbstractTest {
 
     Long movieId = super.mapFromJson(content, Movie.class).getId();
 
-    this.mockMvc.perform(get("/movies/" + movieId))
+    this.mockMvc.perform(get(URI + movieId))
         .andExpect(status().isOk())
         .andDo(document("getOneMovies"));
   }
 
   @Test
   public void shouldCreateMovie() throws Exception {
-    this.mockMvc.perform(post("/movies")
+    this.mockMvc.perform(post(URI)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(createMovie("Reza")))
@@ -80,13 +81,13 @@ public class MovieWebLayerTest extends AbstractTest {
   
   @Test
   public void shouldDeleteMovie() throws Exception {
-    MvcResult createdMovie = this.mockMvc.perform(post("/movies")
+    MvcResult createdMovie = this.mockMvc.perform(post(URI)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .characterEncoding("utf-8")
         .content(this.createMovie("Reza"))).andReturn();
     String movieContent = createdMovie.getResponse().getContentAsString();
-    String uri = "/movies/" + super.mapFromJson(movieContent, Movie.class).getId();
+    String uri = URI + super.mapFromJson(movieContent, Movie.class).getId();
     MvcResult mvcResult = this.mockMvc.perform(delete(uri)).andExpect(status().isOk())
         .andDo(document("deleteOneMovie")).andReturn();
     int status = mvcResult.getResponse().getStatus();
@@ -101,7 +102,7 @@ public class MovieWebLayerTest extends AbstractTest {
     createdMovie.setName("Reza");
     String inputJson = super.mapToJson(createdMovie);
 
-    MvcResult mvcCreateResult = this.mockMvc.perform(post("/movies")
+    MvcResult mvcCreateResult = this.mockMvc.perform(post(URI)
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .characterEncoding("utf-8")
@@ -113,7 +114,7 @@ public class MovieWebLayerTest extends AbstractTest {
     updatedMovie.setName("Ali");
     String updatedInputJson = super.mapToJson(updatedMovie);
 
-    MvcResult mvcUpdateResult = this.mockMvc.perform(put("/movies/"+ this.mapFromJson(prevContent, Movie.class).getId())
+    MvcResult mvcUpdateResult = this.mockMvc.perform(put(URI+ this.mapFromJson(prevContent, Movie.class).getId())
         .contentType(MediaType.APPLICATION_JSON_VALUE).content(updatedInputJson)).andExpect(status().isOk())
         .andDo(document("updateOneMovies")).andReturn();
     
