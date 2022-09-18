@@ -8,13 +8,24 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+/**
+ * @author Reza Zeraat
+ * 
+ *         {@link Director} is a model class that represents a director.
+ */
 @Entity
 @Table(name = "directors")
 public class Director {
+    /**
+     * The id field is used to store the id of a director.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    /**
+     * The name field is used to store the name of a director.
+     */
     @Column
     @NotBlank(message = "Name is mandatory")
     private String name;

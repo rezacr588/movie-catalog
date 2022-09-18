@@ -8,9 +8,17 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+/**
+ * @author Reza Zeraat
+ * 
+ *         {@link Rating} is a model class that represents a rating.
+ */
 @Entity
 @Table(name = "ratings")
 public class Rating {
+    /**
+     * The id field is used to store the id of a rating.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -23,6 +31,9 @@ public class Rating {
         return this.id = id;
     }
     
+    /**
+     * The number field is used to store the rating of a movie.
+     */
     @Column
     @NotNull(message = "Number is mandatory")
     private Integer number;

@@ -15,17 +15,30 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/**
+ * @author Reza Zeraat
+ * 
+ *         {@link Movie} is a model class that represents a movie.
+ */
 @Entity
 @Table(name = "movies")
 public class Movie {
+    /**
+     * The id field is used to store the id of a movie.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     
+    /**
+     * The name field is used to store the name of a movie.
+     */
     @Column
     @NotBlank(message = "Name is mandatory")
     private String name;
-
+    /**
+     * this is a {@link ManyToMany} relationship between {@link Movie} and {@link Director}
+     */
     @ManyToMany
     @JoinTable(name = "movie_director",
             joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"),
@@ -34,6 +47,9 @@ public class Movie {
     @NotNull(message = "Directors are mandatory")
     Set<Director> directors;
 
+    /**
+     * this is a {@link OneToOne} relationship between {@link Movie} and {@link Rating}
+     */
     @OneToOne  
     private Rating rating;
 
